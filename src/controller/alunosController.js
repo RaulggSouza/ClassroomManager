@@ -16,15 +16,29 @@ const alunos = [
         nome: "Bernardette",
         ra: "23145",
         nota1: 10.0,
-        nota2: 1.1
+        nota2: 2
+    },
+    {
+        id: 3,
+        nome: "Clotilde",
+        ra: "12467",
+        nota1: 1.0,
+        nota2: 2.2
     }
 ]
 
 function buscaAluno(id){
     return alunos.findIndex(aluno => {
-        console.log("aaaa");
         return aluno.id === Number(id);
     })
+}
+
+function calculaMedia(nota1, nota2){
+    return parseFloat(((nota1+nota2)/2).toFixed(2));
+}
+
+function verificaStatus(nota1, nota2){
+    return calculaMedia(nota1, nota2) >= 6 ? "aprovado" : "reprovado"
 }
 
 class AlunoController{
@@ -43,6 +57,28 @@ class AlunoController{
             return res.status(404).json( {"message": "Aluno não encontrado"});
         }
         res.status(200).json( alunos[index] );
+    }
+
+    static listarMedias(req, res){
+        const medias = [];
+        alunos.forEach(aluno => medias.push(
+            {
+                "nome": aluno.nome,
+                "media": calculaMedia(aluno.nota1, aluno.nota2)
+            }
+        ))
+        res.status(200).json(medias);
+    }
+
+    static listarAprovados(req, res){
+        const aprovados = [];
+        alunos.forEach(aluno => aprovados.push(
+            {
+                "nome": aluno.nome,
+                "status": verificaStatus(aluno.nota1, aluno.nota2)
+            }
+        ))
+        res.status(200).json(aprovados);
     }
 
     static atualizarAluno(req, res){
