@@ -21,7 +21,6 @@ class AuthController {
             const hashedPassword = await bcrypt.hash(password, 10); // 10 é o salt rounds
 
             const newUser = {
-                id: usuarios.length > 0 ? Math.max(...usuarios.map(u => u.id)) + 1 : 1,
                 username,
                 password: hashedPassword
             };
